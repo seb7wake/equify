@@ -68,3 +68,12 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
+
+gem "shakapacker", "~> 7.2"
+
+gem "react-rails", "~> 3.2"
+
+gem "graphql", "~> 2.3"
+gem "graphiql-rails", group: :development
+
+gem "rack-cors", "~> 2.0"
