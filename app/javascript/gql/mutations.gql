@@ -1,0 +1,47 @@
+mutation CreateShareholder($input: CreateShareholderInput!) {
+  createShareholder(input: $input) {
+    id
+    name
+  }
+}
+
+mutation UpdateShareholder($input: UpdateShareholderInput!) {
+  updateShareholder(input: $input) {
+    id
+    name
+  }
+}
+
+mutation DeleteShareholder($input: DeleteShareholderInput!) {
+  deleteShareholder(input: $input) {
+    id
+  }
+}
+
+mutation UpdateCompany($input: UpdateCompanyInput!) {
+  updateCompany(input: $input) {
+    id
+    name
+    unallocatedOptions
+  }
+}
+
+mutation CreateFinancialInstrument($input: CreateFinancialInstrumentInput!) {
+  createFinancialInstrument(input: $input) {
+    id
+    name
+  }
+}
+
+mutation UpdateFinancialInstrument($input: UpdateFinancialInstrumentInput!) {
+  updateFinancialInstrument(input: $input) {
+    id
+    name
+  }
+}
+
+mutation DeleteFinancialInstrument($input: DeleteFinancialInstrumentInput!) {
+  deleteFinancialInstrument(input: $input) {
+    id
+  }
+}

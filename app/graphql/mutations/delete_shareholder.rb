@@ -1,14 +1,13 @@
 module Mutations
     class DeleteShareholder < BaseMutation
-        argument :company_id, Integer, required: true
         argument :shareholder_id, Integer, required: true
 
         type Types::CompanyType
 
-        def resolve(company_id:, shareholder_id:)
-            company = Company.find(company_id)
+        def resolve(shareholder_id:)
             shareholder = Shareholder.find(shareholder_id)
-            company.shareholders.delete(shareholder)
+            company = Company.find(shareholder.company_id)
+            shareholder.delete()
             company
         end
     end

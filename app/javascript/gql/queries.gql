@@ -6,3 +6,63 @@ query users {
     email
   }
 }
+
+query companies {
+  companies {
+    id
+    name
+    users {
+      id
+    }
+    shareholders {
+      id
+      name
+    }
+  }
+}
+
+query company($id: ID!) {
+  company(id: $id) {
+    id
+    name
+    unallocatedOptions
+    fullyDilutedShares
+    outstandingOptions
+    shareholderFullyDiluted
+    fullyDilutedSubtotalPercentage
+    fullyDilutedTotal
+    users {
+      id
+      email
+      company {
+        id
+      }
+      createdAt
+      updatedAt
+    }
+    financialInstruments {
+      id
+      name
+      instrumentType
+      principal
+      interestRate
+      valuationCap
+      discountRate
+      conversionDate
+      issueDate
+      principalAndInterest
+      accruedInterest
+    }
+    shareholders {
+      id
+      name
+      dilutedShares
+      outstandingOptions
+      createdAt
+      updatedAt
+      companyId
+    }
+    createdAt
+    updatedAt
+  }
+}

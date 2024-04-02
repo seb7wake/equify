@@ -16,7 +16,11 @@ module Mutations
             puts "company_id: #{company_id}"
             puts "shareholder_id: #{shareholder_id}"
             shareholder = Shareholder.find(shareholder_id)
-            shareholder.update!(name: name, diluted_shares: diluted_shares, outstanding_options: outstanding_options)
+            if shareholder.update!(name: name, diluted_shares: diluted_shares, outstanding_options: outstanding_options) then
+                shareholder
+            else
+                raise GraphQL::ExecutionError, shareholder.errors.full_messages.join(", ")
+            end
         end
     end
 end
