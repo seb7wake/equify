@@ -20,7 +20,7 @@ module Mutations
                 raise GraphQL::ExecutionError, "company_id #{company_id} not found"
             end
             accrued_interest = 0
-            if conversion_date.to_datetime && issue_date.to_datetime && conversion_date.to_datetime > issue_date.to_datetime && interest_rate && interest_rate > 0 then 
+            if conversion_date && issue_date && conversion_date.to_datetime && issue_date.to_datetime && conversion_date.to_datetime > issue_date.to_datetime && interest_rate && interest_rate > 0 then 
                 maturity = (conversion_date.to_datetime - issue_date.to_datetime).to_i
                 accrued_interest = principal * (interest_rate.to_f / 100) * (maturity / 365)
             end

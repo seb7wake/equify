@@ -45,3 +45,31 @@ mutation DeleteFinancialInstrument($input: DeleteFinancialInstrumentInput!) {
     id
   }
 }
+
+mutation UpdateNextRound($input: UpdateNextRoundInput!) {
+  updateNextRound(input: $input) {
+    companyId
+  }
+}
+
+mutation CreateInvestor($input: CreateInvestorInput!) {
+  createInvestor(input: $input) {
+    id
+    name
+    amount
+  }
+}
+
+mutation UpdateInvestor($input: UpdateInvestorInput!) {
+  updateInvestor(input: $input) {
+    id
+    name
+    amount
+  }
+}
+
+mutation DeleteInvestor($input: DeleteInvestorInput!) {
+  deleteInvestor(input: $input) {
+    id
+  }
+}

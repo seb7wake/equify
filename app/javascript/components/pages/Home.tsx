@@ -4,6 +4,7 @@ import { useCompanyQuery } from "../../generated/graphql";
 import CurrentTable from "./CurrentTable";
 import { Company } from "../../generated/graphql";
 import FundingInstruments from "./FundingInstruments";
+import ModelRound from "./ModelRound";
 
 const Home: React.FC = () => {
   const [page, setPage] = React.useState("currentTable");
@@ -22,7 +23,9 @@ const Home: React.FC = () => {
         return (
           <FundingInstruments company={data?.company as Partial<Company>} />
         );
-      default:
+      case "modelNextRound":
+        return <ModelRound company={data?.company as Partial<Company>} />;
+      case "proFormCapTable":
         return <CurrentTable company={data?.company as Partial<Company>} />;
     }
   };

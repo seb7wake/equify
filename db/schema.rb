@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_04_02_123318) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_29_175740) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -37,6 +37,26 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_02_123318) do
     t.index ["company_id"], name: "index_financial_instruments_on_company_id"
   end
 
+  create_table "investors", force: :cascade do |t|
+    t.string "name"
+    t.integer "amount"
+    t.bigint "next_round_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["next_round_id"], name: "index_investors_on_next_round_id"
+  end
+
+  create_table "next_rounds", force: :cascade do |t|
+    t.integer "round_size", default: 1000000, null: false
+    t.integer "pre_money_valuation", default: 8000000, null: false
+    t.bigint "company_id", null: false
+    t.integer "buying_power"
+    t.integer "implicit_valuation"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["company_id"], name: "index_next_rounds_on_company_id"
+  end
+
   create_table "shareholders", force: :cascade do |t|
     t.integer "diluted_shares"
     t.string "name"
@@ -56,6 +76,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_02_123318) do
   end
 
   add_foreign_key "financial_instruments", "companies"
+  add_foreign_key "investors", "next_rounds"
+  add_foreign_key "next_rounds", "companies"
   add_foreign_key "shareholders", "companies"
   add_foreign_key "users", "companies"
 end

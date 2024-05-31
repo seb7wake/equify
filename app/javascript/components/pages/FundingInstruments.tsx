@@ -18,7 +18,10 @@ const FundingInstruments: React.FC<FundingInstrumentsProps> = ({ company }) => {
   const [instruments, setInstruments] = useState<
     Array<Partial<FinancialInstrument>>
   >(company?.financialInstruments || []);
-  const [createFinancialInstrument] = useCreateFinancialInstrumentMutation();
+  const [createFinancialInstrument] = useCreateFinancialInstrumentMutation({
+    refetchQueries: ["company"],
+    awaitRefetchQueries: true,
+  });
   const [deleteFinancialInstrument] = useDeleteFinancialInstrumentMutation();
   const [updateFinancialInstrument] = useUpdateFinancialInstrumentMutation({
     refetchQueries: ["company"],
@@ -337,7 +340,35 @@ const FundingInstruments: React.FC<FundingInstrumentsProps> = ({ company }) => {
           </tr>
         </tbody>
       </Table>
-      <Button>Calculate Conversion Results</Button>
+      <Container>
+        <h3>Conversion Results</h3>
+        <Table>
+          <thead>
+            <tr>
+              <th>Holder Name</th>
+              <th>Instrument Type</th>
+              <th>Valuation Cap Denominator</th>
+              <th>Valuation Cap Price / Share</th>
+              <th>Discounted Price Per Share</th>
+              <th>Conversion Price</th>
+              <th>Shares Converted</th>
+            </tr>
+          </thead>
+          <tbody>
+            {company?.conversionResults?.map((result, index) => (
+              <tr key={result.holderId}>
+                <td>{result.holderName}</td>
+                <td>{result.instrumentType}</td>
+                <td>{result.valuationCapDenominator}</td>
+                <td>{result.valuationCapSharePrice}</td>
+                <td>{result.discountedSharePrice}</td>
+                <td>{result.conversionPrice}</td>
+                <td>{result.sharesConverted}</td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </Container>
     </Container>
   );
 };

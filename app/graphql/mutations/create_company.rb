@@ -8,6 +8,7 @@ module Mutations
   
       def resolve(name:)
         Company.create!(name: name)
+        NextRound.create!(company_id: Company.last.id)
       end
     end
 end

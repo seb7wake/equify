@@ -55,14 +55,14 @@ const Header: React.FC<HeaderProps> = ({ page, setPage }) => {
             Model Next Round
           </Nav.Link>
           <Nav.Link
-            onClick={() => setPage("projectedTable")}
+            onClick={() => setPage("proFormCapTable")}
             className={
               page === "projectedTable"
                 ? "text-decoration-underline mx-3 text-nowrap"
                 : "mx-3 text-nowrap"
             }
           >
-            Projected Cap Table
+            Pro Forma Cap Table
           </Nav.Link>
         </Nav>
       </Navbar.Collapse>

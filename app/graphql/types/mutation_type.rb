@@ -11,5 +11,9 @@ module Types
     field :create_financial_instrument, mutation: Mutations::CreateFinancialInstrument
     field :update_financial_instrument, mutation: Mutations::UpdateFinancialInstrument
     field :delete_financial_instrument, mutation: Mutations::DeleteFinancialInstrument
+    field :update_next_round, mutation: Mutations::UpdateNextRound
+    field :create_investor, mutation: Mutations::CreateInvestor
+    field :update_investor, mutation: Mutations::UpdateInvestor
+    field :delete_investor, mutation: Mutations::DeleteInvestor
   end
 end

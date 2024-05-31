@@ -53,6 +53,28 @@ query company($id: ID!) {
       principalAndInterest
       accruedInterest
     }
+    nextRound {
+      companyId
+      preMoneyValuation
+      roundSize
+      buyingPower
+      implicitValuation
+      investors {
+        id
+        name
+        amount
+      }
+    }
+    conversionResults {
+      conversionPrice
+      discountedSharePrice
+      holderId
+      holderName
+      instrumentType
+      sharesConverted
+      valuationCapDenominator
+      valuationCapSharePrice
+    }
     shareholders {
       id
       name
