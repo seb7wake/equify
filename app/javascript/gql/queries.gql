@@ -84,6 +84,19 @@ query company($id: ID!) {
       updatedAt
       companyId
     }
+    capTable {
+      sharesExcludingOptions
+      sharesExcludingOptionsPercentage
+      shareholders {
+        name
+        fullyDilutedTotal
+        fullyDilutedPercentage
+      }
+      unallocatedOptions
+      unallocatedOptionsPercentage
+      totalShares
+      totalSharesPercentage
+    }
     createdAt
     updatedAt
   }

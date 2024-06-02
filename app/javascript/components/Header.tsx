@@ -10,7 +10,7 @@ type HeaderProps = {
 
 const Header: React.FC<HeaderProps> = ({ page, setPage }) => {
   return (
-    <Navbar className="bg-white">
+    <Navbar className="bg-white mx-5">
       <Container>
         <Navbar.Brand
           className="d-flex align-items-center"
@@ -57,7 +57,7 @@ const Header: React.FC<HeaderProps> = ({ page, setPage }) => {
           <Nav.Link
             onClick={() => setPage("proFormCapTable")}
             className={
-              page === "projectedTable"
+              page === "proFormCapTable"
                 ? "text-decoration-underline mx-3 text-nowrap"
                 : "mx-3 text-nowrap"
             }

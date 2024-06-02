@@ -133,7 +133,8 @@ const FundingInstruments: React.FC<FundingInstrumentsProps> = ({ company }) => {
 
   return (
     <Container>
-      <Table>
+      <h4 className="my-4">SAFEs and Notes</h4>
+      <Table hover className="border">
         <thead>
           <tr>
             <th>Holder Name</th>
@@ -141,12 +142,12 @@ const FundingInstruments: React.FC<FundingInstrumentsProps> = ({ company }) => {
             <th>Principal</th>
             <th>Valuation Cap</th>
             <th>Discount</th>
-            <th>Interest Rate</th>
+            {/*  <th>Interest Rate</th>
             <th>Issue Date</th>
             <th>Conversion Date</th>
             <th>Interest Accrued</th>
-            <th>Principal and Interest</th>
-            <th></th>
+            <th>Principal and Interest</th> */}
+            {/* <th></th> */}
             <th></th>
           </tr>
         </thead>
@@ -234,7 +235,7 @@ const FundingInstruments: React.FC<FundingInstrumentsProps> = ({ company }) => {
                   <InputGroup.Text>%</InputGroup.Text>
                 </InputGroup>
               </td>
-              <td>
+              {/* <td>
                 <InputGroup>
                   <Form.Control
                     type="decimal"
@@ -297,7 +298,7 @@ const FundingInstruments: React.FC<FundingInstrumentsProps> = ({ company }) => {
                 </Form.Group>
               </td>
               <td>{instrument.accruedInterest || 0}</td>
-              <td>{instrument.principalAndInterest || 0}</td>
+              <td>{instrument.principalAndInterest || 0}</td> */}
               {/* <td>
                 {editRow === index ? (
                   <FaRegCheckCircle
@@ -336,39 +337,36 @@ const FundingInstruments: React.FC<FundingInstrumentsProps> = ({ company }) => {
             <td></td>
             <td></td>
             <td></td>
-            <td></td>
           </tr>
         </tbody>
       </Table>
-      <Container>
-        <h3>Conversion Results</h3>
-        <Table>
-          <thead>
-            <tr>
-              <th>Holder Name</th>
-              <th>Instrument Type</th>
-              <th>Valuation Cap Denominator</th>
-              <th>Valuation Cap Price / Share</th>
-              <th>Discounted Price Per Share</th>
-              <th>Conversion Price</th>
-              <th>Shares Converted</th>
+      <h4 className="my-4">Conversion Results</h4>
+      <Table className="border">
+        <thead>
+          <tr>
+            <th>Holder Name</th>
+            <th>Instrument Type</th>
+            <th>Valuation Cap Denominator</th>
+            <th>Valuation Cap Price / Share</th>
+            <th>Discounted Price Per Share</th>
+            <th>Conversion Price</th>
+            <th>Shares Converted</th>
+          </tr>
+        </thead>
+        <tbody>
+          {company?.conversionResults?.map((result, index) => (
+            <tr key={result.holderId}>
+              <td>{result.holderName}</td>
+              <td>{result.instrumentType}</td>
+              <td>{result.valuationCapDenominator}</td>
+              <td>{result.valuationCapSharePrice}</td>
+              <td>{result.discountedSharePrice}</td>
+              <td>{result.conversionPrice}</td>
+              <td>{result.sharesConverted}</td>
             </tr>
-          </thead>
-          <tbody>
-            {company?.conversionResults?.map((result, index) => (
-              <tr key={result.holderId}>
-                <td>{result.holderName}</td>
-                <td>{result.instrumentType}</td>
-                <td>{result.valuationCapDenominator}</td>
-                <td>{result.valuationCapSharePrice}</td>
-                <td>{result.discountedSharePrice}</td>
-                <td>{result.conversionPrice}</td>
-                <td>{result.sharesConverted}</td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-      </Container>
+          ))}
+        </tbody>
+      </Table>
     </Container>
   );
 };

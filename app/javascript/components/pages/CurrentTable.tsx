@@ -7,7 +7,7 @@ import {
   useDeleteShareholderMutation,
   useUpdateCompanyMutation,
 } from "../../generated/graphql";
-import { Table, Button, Form } from "react-bootstrap";
+import { Table, Button, Form, Container } from "react-bootstrap";
 import { MdOutlineModeEdit } from "react-icons/md";
 import { FaTrashAlt, FaRegCheckCircle } from "react-icons/fa";
 
@@ -24,10 +24,14 @@ const CurrentTable: React.FC<CurrentTableProps> = ({ company }) => {
   const [unallocatedOptions, setUnallocatedOptions] = useState(
     company?.unallocatedOptions || 0
   );
-  const [createShareholder] = useCreateShareholderMutation();
-  const [updateShareholder] = useUpdateShareholderMutation();
-  const [deleteShareholder] = useDeleteShareholderMutation();
-  const [updateCompany] = useUpdateCompanyMutation();
+  const mutationOptions = {
+    refetchQueries: ["company"],
+    awaitRefetchQueries: true,
+  };
+  const [createShareholder] = useCreateShareholderMutation(mutationOptions);
+  const [updateShareholder] = useUpdateShareholderMutation(mutationOptions);
+  const [deleteShareholder] = useDeleteShareholderMutation(mutationOptions);
+  const [updateCompany] = useUpdateCompanyMutation(mutationOptions);
 
   const editShareholder = (index: number, key: string, value: any) => {
     let newShareholders = shareholders.map((shareholder, i) => {
@@ -54,7 +58,7 @@ const CurrentTable: React.FC<CurrentTableProps> = ({ company }) => {
     const shareholder = shareholders[index];
     let shares = shareholder?.dilutedShares || 0;
     let options = shareholder?.outstandingOptions || 0;
-    if (shares >= 0 && options >= 0 && shareholder?.name) {
+    if (shareholder?.name) {
       const shareholderData = {
         name: shareholder?.name,
         dilutedShares: shares,
@@ -120,10 +124,9 @@ const CurrentTable: React.FC<CurrentTableProps> = ({ company }) => {
 
   return (
     <>
-      <div className="bg-light h-100">
-        <h1>Current Table</h1>
-        <br />
-        <Table>
+      <Container>
+        <h4 className="my-4">Current Cap Table</h4>
+        <Table hover className="border">
           <thead>
             <tr>
               <th>Shareholder Name</th>
@@ -222,7 +225,7 @@ const CurrentTable: React.FC<CurrentTableProps> = ({ company }) => {
                 </td>
               </tr>
             ))}
-            <tr>
+            <tr style={{ borderBottom: "1px solid black" }}>
               <td>
                 <Button variant="primary" onClick={() => addShareholder()}>
                   + Add Shareholder
@@ -262,22 +265,28 @@ const CurrentTable: React.FC<CurrentTableProps> = ({ company }) => {
               <td></td>
               <td></td>
             </tr>
-            <tr>
-              <td>Total</td>
-              <td></td>
-              <td></td>
-              <td>{company?.fullyDilutedTotal}</td>
+            <tr style={{ borderBottom: "1px solid black" }}>
               <td>
-                {parseFloat(getUnallocatedOptionsPercentage()) +
-                  (company?.fullyDilutedSubtotalPercentage || 0)}
-                %
+                <strong>Total</strong>
+              </td>
+              <td></td>
+              <td></td>
+              <td>
+                <strong>{company?.fullyDilutedTotal}</strong>
+              </td>
+              <td>
+                <strong>
+                  {parseFloat(getUnallocatedOptionsPercentage()) +
+                    (company?.fullyDilutedSubtotalPercentage || 0)}
+                  %
+                </strong>
               </td>
               <td></td>
               <td></td>
             </tr>
           </tbody>
         </Table>
-      </div>
+      </Container>
     </>
   );
 };

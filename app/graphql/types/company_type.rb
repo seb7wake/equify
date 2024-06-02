@@ -15,6 +15,7 @@ module Types
     field :financial_instruments, [Types::FinancialInstrumentType], null: false
     field :next_round, Types::NextRoundType, null: false
     field :conversion_results, [Types::ConversionResultType], null: false
+    field :cap_table, Types::CapTableType, null: false
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
   end
