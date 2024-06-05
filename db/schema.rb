@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_29_175740) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_05_220408) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -47,11 +47,11 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_29_175740) do
   end
 
   create_table "next_rounds", force: :cascade do |t|
-    t.integer "round_size", default: 1000000, null: false
-    t.integer "pre_money_valuation", default: 8000000, null: false
+    t.bigint "round_size", default: 1000000, null: false
+    t.bigint "pre_money_valuation", default: 8000000, null: false
     t.bigint "company_id", null: false
-    t.integer "buying_power"
-    t.integer "implicit_valuation"
+    t.bigint "buying_power"
+    t.bigint "implicit_valuation"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["company_id"], name: "index_next_rounds_on_company_id"

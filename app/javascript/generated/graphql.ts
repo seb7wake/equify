@@ -15,6 +15,7 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+  BigInt: { input: any; output: any; }
   ISO8601DateTime: { input: any; output: any; }
 };
 
@@ -63,8 +64,8 @@ export type ConversionResult = {
   holderId: Scalars['ID']['output'];
   holderName: Scalars['String']['output'];
   instrumentType: Scalars['String']['output'];
-  sharesConverted: Scalars['Int']['output'];
-  valuationCapDenominator: Scalars['Int']['output'];
+  sharesConverted: Scalars['BigInt']['output'];
+  valuationCapDenominator: Scalars['BigInt']['output'];
   valuationCapSharePrice: Scalars['Float']['output'];
 };
 
@@ -249,12 +250,12 @@ export type MutationUpdateShareholderArgs = {
 
 export type NextRound = {
   __typename?: 'NextRound';
-  buyingPower?: Maybe<Scalars['Int']['output']>;
+  buyingPower?: Maybe<Scalars['BigInt']['output']>;
   companyId: Scalars['Int']['output'];
-  implicitValuation?: Maybe<Scalars['Int']['output']>;
+  implicitValuation?: Maybe<Scalars['BigInt']['output']>;
   investors?: Maybe<Array<Investor>>;
-  preMoneyValuation?: Maybe<Scalars['Int']['output']>;
-  roundSize?: Maybe<Scalars['Int']['output']>;
+  preMoneyValuation?: Maybe<Scalars['BigInt']['output']>;
+  roundSize?: Maybe<Scalars['BigInt']['output']>;
 };
 
 export type Query = {
@@ -436,7 +437,7 @@ export type CompanyQueryVariables = Exact<{
 }>;
 
 
-export type CompanyQuery = { __typename?: 'Query', company: { __typename?: 'Company', id: string, name: string, unallocatedOptions: number, fullyDilutedShares?: number | null, outstandingOptions?: number | null, shareholderFullyDiluted?: number | null, fullyDilutedSubtotalPercentage?: number | null, fullyDilutedTotal?: number | null, createdAt: any, updatedAt: any, users: Array<{ __typename?: 'User', id: string, email: string, createdAt: any, updatedAt: any, company: { __typename?: 'Company', id: string } }>, financialInstruments: Array<{ __typename?: 'FinancialInstrument', id: string, name: string, instrumentType: string, principal: number, interestRate?: number | null, valuationCap: number, discountRate?: number | null, conversionDate?: any | null, issueDate?: any | null, principalAndInterest?: number | null, accruedInterest?: number | null }>, nextRound: { __typename?: 'NextRound', companyId: number, preMoneyValuation?: number | null, roundSize?: number | null, buyingPower?: number | null, implicitValuation?: number | null, investors?: Array<{ __typename?: 'Investor', id: string, name: string, amount: number }> | null }, conversionResults: Array<{ __typename?: 'ConversionResult', conversionPrice: number, discountedSharePrice: number, holderId: string, holderName: string, instrumentType: string, sharesConverted: number, valuationCapDenominator: number, valuationCapSharePrice: number }>, shareholders: Array<{ __typename?: 'Shareholder', id: string, name: string, dilutedShares?: number | null, outstandingOptions?: number | null, createdAt: any, updatedAt: any, companyId: number }>, capTable: { __typename?: 'CapTable', sharesExcludingOptions: number, sharesExcludingOptionsPercentage: number, unallocatedOptions: number, unallocatedOptionsPercentage: number, totalShares: number, totalSharesPercentage: number, shareholders: Array<{ __typename?: 'CapTableShareholder', name: string, fullyDilutedTotal?: number | null, fullyDilutedPercentage?: number | null }> } } };
+export type CompanyQuery = { __typename?: 'Query', company: { __typename?: 'Company', id: string, name: string, unallocatedOptions: number, fullyDilutedShares?: number | null, outstandingOptions?: number | null, shareholderFullyDiluted?: number | null, fullyDilutedSubtotalPercentage?: number | null, fullyDilutedTotal?: number | null, createdAt: any, updatedAt: any, users: Array<{ __typename?: 'User', id: string, email: string, createdAt: any, updatedAt: any, company: { __typename?: 'Company', id: string } }>, financialInstruments: Array<{ __typename?: 'FinancialInstrument', id: string, name: string, instrumentType: string, principal: number, interestRate?: number | null, valuationCap: number, discountRate?: number | null, conversionDate?: any | null, issueDate?: any | null, principalAndInterest?: number | null, accruedInterest?: number | null }>, nextRound: { __typename?: 'NextRound', companyId: number, preMoneyValuation?: any | null, roundSize?: any | null, buyingPower?: any | null, implicitValuation?: any | null, investors?: Array<{ __typename?: 'Investor', id: string, name: string, amount: number }> | null }, conversionResults: Array<{ __typename?: 'ConversionResult', conversionPrice: number, discountedSharePrice: number, holderId: string, holderName: string, instrumentType: string, sharesConverted: any, valuationCapDenominator: any, valuationCapSharePrice: number }>, shareholders: Array<{ __typename?: 'Shareholder', id: string, name: string, dilutedShares?: number | null, outstandingOptions?: number | null, createdAt: any, updatedAt: any, companyId: number }>, capTable: { __typename?: 'CapTable', sharesExcludingOptions: number, sharesExcludingOptionsPercentage: number, unallocatedOptions: number, unallocatedOptionsPercentage: number, totalShares: number, totalSharesPercentage: number, shareholders: Array<{ __typename?: 'CapTableShareholder', name: string, fullyDilutedTotal?: number | null, fullyDilutedPercentage?: number | null }> } } };
 
 
 export const CreateShareholderDocument = gql`
