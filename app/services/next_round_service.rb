@@ -9,15 +9,16 @@ class NextRoundService
         outstanding_shares = @company.fully_diluted_total
         # may need to adust discounted share price calculation
         share_price = (@company.next_round.pre_money_valuation.to_f / outstanding_shares)
-        pre_money_instruments = @company.financial_instruments.where(instrument_type: ["Pre-Money SAFE", "Pre-Money Convertible Note", "Convertible Note"]).where('valuation_cap > ?', 0).where('principal > ?', 0)
+        principal_less_than_valuation_cap = FinancialInstrument.arel_table[:principal].lt(FinancialInstrument.arel_table[:valuation_cap])
+        pre_money_instruments = @company.financial_instruments.where(instrument_type: ["Pre-Money SAFE", "Pre-Money Convertible Note", "Convertible Note"]).where('valuation_cap > ?', 0).where('principal > ?', 0).where(principal_less_than_valuation_cap)
         pre_money_instruments.each do |instrument|
           discounted_share_price = share_price
           discounted_share_price -= share_price * (instrument.discount_rate.to_f / 100) if instrument.discount_rate > 0 && @company.next_round.pre_money_valuation <= instrument.valuation_cap
           valuation_cap_share_price = instrument.valuation_cap.to_f / @company.fully_diluted_total
-          outstanding_shares += (instrument.principal / instrument.valuation_cap.to_f) * outstanding_shares
+          outstanding_shares += (instrument.principal / instrument.valuation_cap.to_f) * @company.fully_diluted_total
           shares += instrument.principal / [valuation_cap_share_price, discounted_share_price].min
         end
-        post_money_instruments = @company.financial_instruments.where(instrument_type: ["Post-Money SAFE"]).where('valuation_cap > ?', 0).where('principal > ?', 0)
+        post_money_instruments = @company.financial_instruments.where(instrument_type: ["Post-Money SAFE"]).where('valuation_cap > ?', 0).where('principal > ?', 0).where(principal_less_than_valuation_cap)
         total_percent_owed_post_money_safes = post_money_instruments.sum { |instrument| instrument.principal / instrument.valuation_cap.to_f }
         outstanding_shares_new = outstanding_shares / (1.0 - total_percent_owed_post_money_safes).to_f
         post_money_instruments.each do |instrument|

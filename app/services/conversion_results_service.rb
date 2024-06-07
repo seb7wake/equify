@@ -3,8 +3,9 @@ class ConversionResultsService
     def initialize(company:)
         @company = company
         @conversion_results = nil
-        @pre_money_instruments = @company.financial_instruments.where(instrument_type: ["Pre-Money SAFE", "Pre-Money Convertible Note", "Convertible Note"]).where('valuation_cap > ?', 0).where('principal > ?', 0)
-        @post_money_instruments = @company.financial_instruments.where(instrument_type: "Post-Money SAFE").where('valuation_cap > ?', 0).where('principal > ?', 0)
+        principal_less_than_valuation_cap = FinancialInstrument.arel_table[:principal].lt(FinancialInstrument.arel_table[:valuation_cap])
+        @pre_money_instruments = @company.financial_instruments.where(instrument_type: ["Pre-Money SAFE", "Pre-Money Convertible Note", "Convertible Note"]).where('valuation_cap > ?', 0).where('principal > ?', 0).where(principal_less_than_valuation_cap)
+        @post_money_instruments = @company.financial_instruments.where(instrument_type: "Post-Money SAFE").where('valuation_cap > ?', 0).where('principal > ?', 0).where(principal_less_than_valuation_cap)
     end
 
     def convert_pre_money_instruments()
@@ -37,7 +38,7 @@ class ConversionResultsService
       def convert_post_money_instruments(outstanding_shares:)
         converted_instruments = []
         total_percent_owed = @post_money_instruments.sum { |instrument| instrument.principal / instrument.valuation_cap.to_f }
-        outstanding_shares = outstanding_shares / (1.0 - total_percent_owed).to_f
+        outstanding_shares = outstanding_shares / (1.0 - total_percent_owed.to_f).to_f
         puts "outstanding_shares: #{total_percent_owed}"
         @post_money_instruments.map do |instrument|
           new_share_price = (instrument.valuation_cap.to_f / outstanding_shares)
@@ -60,7 +61,7 @@ class ConversionResultsService
   
       def construct_conversion_results()
         outstanding_shares = @company.fully_diluted_total
-        @pre_money_instruments.each { |instrument| outstanding_shares += (instrument.principal / instrument.valuation_cap.to_f) * outstanding_shares }
+        @pre_money_instruments.each { |instrument| outstanding_shares += (instrument.principal / instrument.valuation_cap.to_f) * @company.fully_diluted_total }
         self.convert_pre_money_instruments() + self.convert_post_money_instruments(outstanding_shares: outstanding_shares)
       end
 end
