@@ -6,11 +6,14 @@ import { Company } from "../../generated/graphql";
 import FundingInstruments from "./FundingInstruments";
 import ModelRound from "./ModelRound";
 import ProFormaCapTable from "./ProFormaCapTable";
+import { currentCompanyVar } from "../../apolloClient";
+import { useReactiveVar } from "@apollo/client";
 
 const Home: React.FC = () => {
+  const company = useReactiveVar(currentCompanyVar);
   const [page, setPage] = React.useState("currentTable");
   const { data, loading, error } = useCompanyQuery({
-    variables: { id: "1" },
+    variables: { id: company.id },
   });
 
   console.log(error?.message);
@@ -35,7 +38,7 @@ const Home: React.FC = () => {
 
   return (
     <>
-      <Header page={page} setPage={setPage} />
+      <Header page={page} setPage={setPage} showNav />
       <div className="d-flex bg-light min-vh-100">{getPage()}</div>
     </>
   );

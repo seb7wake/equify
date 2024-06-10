@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Home from "../components/pages/Home"; // Adjust the import path as necessary
 import { createRoot } from "react-dom/client";
+import { Navigate } from "react-router";
 import {
   ApolloProvider,
   ApolloClient,
@@ -12,11 +13,9 @@ import {
 import "bootstrap/dist/css/bootstrap.min.css";
 // Bootstrap Bundle JS
 import "bootstrap/dist/js/bootstrap.bundle.min";
-
-const client = new ApolloClient({
-  link: new HttpLink({ uri: "http://localhost:3000/graphql" }),
-  cache: new InMemoryCache(),
-});
+import Auth from "./pages/auth/Auth";
+import client, { currentCompanyVar } from "../apolloClient";
+import { useReactiveVar } from "@apollo/client";
 
 document.addEventListener("turbo:load", () => {
   const root = createRoot(
@@ -25,12 +24,20 @@ document.addEventListener("turbo:load", () => {
   root.render(<App />);
 });
 
-const App = (props: any) => {
+const App = () => {
+  const currentCompany = useReactiveVar(currentCompanyVar);
+
   return (
     <ApolloProvider client={client}>
       <Router>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route
+            path="/"
+            element={
+              currentCompany ? <Home /> : <Navigate to="/auth" replace />
+            }
+          />
+          <Route path="/auth" element={<Auth />} />
         </Routes>
       </Router>
     </ApolloProvider>

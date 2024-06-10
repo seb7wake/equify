@@ -20,9 +20,9 @@ class ConversionResultsService
               holder_name: instrument.name,
               instrument_type: instrument.instrument_type,
               valuation_cap_denominator: @company.fully_diluted_total,
-              valuation_cap_share_price: valuation_cap_share_price,
-              discounted_share_price: discounted_share_price,
-              conversion_price: [valuation_cap_share_price, discounted_share_price].min,
+              valuation_cap_share_price: valuation_cap_share_price.round(4),
+              discounted_share_price: discounted_share_price.round(4),
+              conversion_price: [valuation_cap_share_price, discounted_share_price].min.round(4),
               shares_converted: instrument.principal / [valuation_cap_share_price, discounted_share_price].min
             }
         end

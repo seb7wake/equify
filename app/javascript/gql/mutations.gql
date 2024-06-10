@@ -73,3 +73,87 @@ mutation DeleteInvestor($input: DeleteInvestorInput!) {
     id
   }
 }
+
+mutation Auth($input: AuthInput!) {
+  auth(input: $input) {
+    company {
+      id
+      name
+      unallocatedOptions
+      fullyDilutedShares
+      outstandingOptions
+      shareholderFullyDiluted
+      fullyDilutedSubtotalPercentage
+      fullyDilutedTotal
+      users {
+        id
+        email
+        company {
+          id
+        }
+        createdAt
+        updatedAt
+      }
+      financialInstruments {
+        id
+        name
+        instrumentType
+        principal
+        interestRate
+        valuationCap
+        discountRate
+        conversionDate
+        issueDate
+        principalAndInterest
+        accruedInterest
+      }
+      nextRound {
+        companyId
+        preMoneyValuation
+        roundSize
+        buyingPower
+        implicitValuation
+        investors {
+          id
+          name
+          amount
+        }
+      }
+      conversionResults {
+        conversionPrice
+        discountedSharePrice
+        holderId
+        holderName
+        instrumentType
+        sharesConverted
+        valuationCapDenominator
+        valuationCapSharePrice
+      }
+      shareholders {
+        id
+        name
+        dilutedShares
+        outstandingOptions
+        createdAt
+        updatedAt
+        companyId
+      }
+      capTable {
+        sharesExcludingOptions
+        sharesExcludingOptionsPercentage
+        shareholders {
+          name
+          fullyDilutedTotal
+          fullyDilutedPercentage
+        }
+        unallocatedOptions
+        unallocatedOptionsPercentage
+        totalShares
+        totalSharesPercentage
+      }
+      createdAt
+      updatedAt
+    }
+    errors
+  }
+}

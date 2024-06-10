@@ -26,6 +26,13 @@ class CapTableService
             fully_diluted_total: (investor.amount.to_f / share_price).round(0),
           }
         end
+        investor_sum = @company.next_round.investors.sum { |investor| investor.amount.to_f }
+        if investor_sum < @company.next_round.round_size
+          shareholders << {
+            name: "Unallocated",
+            fully_diluted_total: (@company.next_round.round_size - investor_sum) / share_price,
+          }
+        end
         shareholders
       end
   

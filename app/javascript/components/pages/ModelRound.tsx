@@ -259,7 +259,9 @@ const ModelRound: React.FC<ModelRoundProps> = ({ company }) => {
                 </td>
                 <td>
                   <div className="d-flex align-items-center">
-                    {preMoneyValuation / (company?.fullyDilutedTotal || 1)}
+                    {(
+                      preMoneyValuation / (company?.fullyDilutedTotal || 1)
+                    ).toFixed(4)}
                   </div>
                 </td>
               </tr>

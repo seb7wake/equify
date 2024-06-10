@@ -24,5 +24,6 @@ module Equitrack
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
     config.react.server_renderer_extensions = ["jsx", "js", "tsx", "ts"]
+    config.middleware.use ActionDispatch::Session::CookieStore, key: "_equitrack_session"
   end
 end

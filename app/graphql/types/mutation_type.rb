@@ -15,5 +15,6 @@ module Types
     field :create_investor, mutation: Mutations::CreateInvestor
     field :update_investor, mutation: Mutations::UpdateInvestor
     field :delete_investor, mutation: Mutations::DeleteInvestor
+    field :auth , mutation: Mutations::Auth
   end
 end
