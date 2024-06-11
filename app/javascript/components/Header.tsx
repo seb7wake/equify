@@ -19,7 +19,7 @@ const Header: React.FC<HeaderProps> = ({ page, setPage, showNav }) => {
         >
           <MdOutlineHandshake className="me-2" size={40} />
           <div className="d-flex flex-column mx-2 h3 font-weight-bold">
-            EquiTrack
+            Equify
           </div>
         </Navbar.Brand>
       </Container>

@@ -43,25 +43,32 @@ const Auth: React.FC = () => {
       <Header showNav={false} />
       <div className="d-flex bg-light min-vh-100">
         <Form className="w-50 mx-auto">
-          <Form.Group controlId="formBasicPassword">
-            <Form.Label>Company Name</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Acme Inc."
-              onChange={(e) => setCompanyName(e.target.value)}
-              value={companyName}
-            />
-            <Form.Text className="text-muted">
-              New here? Enter a company name to sign up or log in.
-            </Form.Text>
-          </Form.Group>
-          <Button
-            variant="primary"
-            type="submit"
-            onClick={(e) => handleSubmit(e)}
+          <div
+            className="bg-white p-4 border border-1 border-dark rounded"
+            style={{ marginTop: "20vh" }}
           >
-            Start Equity Modeling
-          </Button>
+            <h4 className="text-center mb-4">Welcome to Equify</h4>
+            <Form.Group controlId="formBasicPassword">
+              <Form.Label>Company Name</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Acme Inc."
+                onChange={(e) => setCompanyName(e.target.value)}
+                value={companyName}
+              />
+              <Form.Text className="text-muted">
+                New here? Enter a company name to sign up or log in.
+              </Form.Text>
+            </Form.Group>
+            <Button
+              variant="primary"
+              type="submit"
+              className="mt-5 text-center w-100"
+              onClick={(e) => handleSubmit(e)}
+            >
+              Start Modeling
+            </Button>
+          </div>
         </Form>
       </div>
     </>
