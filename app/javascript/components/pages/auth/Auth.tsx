@@ -13,13 +13,13 @@ import { useReactiveVar } from "@apollo/client";
 
 const Auth: React.FC = () => {
   const company = useReactiveVar(currentCompanyVar);
-  const [email, setEmail] = useState("");
   const navigate = useNavigate();
   const [companyName, setCompanyName] = useState("");
   const [auth] = useAuthMutation();
-  console.log("here");
+
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    if (!companyName) return;
     try {
       const response = await auth({
         variables: {

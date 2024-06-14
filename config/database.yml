@@ -79,6 +79,8 @@ test:
 #
 production:
   <<: *default
-  database: equitrack_production
-  username: equitrack
-  password: <%= ENV["EQUITRACK_DATABASE_PASSWORD"] %>
+  database: <%= ENV["PRODUCTION_DB_NAME"] %>
+  username: <%= ENV["PRODUCTION_DB_USERNAME"] %>
+  password: <%= Rails.application.credentials.gcp[:dbpassword] %>
+  host: <%= "#{ENV.fetch("DB_SOCKET_DIR", "/cloudsql")}/#{ENV["CLOUD_SQL_CONNECTION_NAME"]}" %>
+  port: 5432
