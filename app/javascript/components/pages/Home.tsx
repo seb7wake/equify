@@ -8,6 +8,7 @@ import ModelRound from "../sections/ModelRound";
 import ProFormaCapTable from "../sections/ProFormaCapTable";
 import { currentCompanyVar } from "../../apolloClient";
 import { useReactiveVar } from "@apollo/client";
+import { Spinner } from "react-bootstrap";
 
 const Home: React.FC = () => {
   const company = useReactiveVar(currentCompanyVar);
@@ -16,7 +17,12 @@ const Home: React.FC = () => {
     variables: { id: company.id },
   });
 
-  if (loading) return <p>Loading...</p>;
+  if (loading)
+    return (
+      <div className="d-flex align-items-center justify-content-center">
+        <Spinner animation="border" />
+      </div>
+    );
   if (error) return <p>Error</p>;
 
   const getPage = () => {

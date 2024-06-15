@@ -11,7 +11,7 @@ type HeaderProps = {
 
 const Header: React.FC<HeaderProps> = ({ page, setPage, showNav }) => {
   return (
-    <Navbar className="bg-white mx-5">
+    <Navbar className="bg-white px-5 border-bottom">
       <Container>
         <Navbar.Brand
           className="d-flex align-items-center"

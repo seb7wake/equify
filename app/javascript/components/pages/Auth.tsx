@@ -10,6 +10,7 @@ import { Button, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { currentCompanyVar } from "../../apolloClient";
 import { useReactiveVar } from "@apollo/client";
+import { Spinner } from "react-bootstrap";
 
 const Auth: React.FC = () => {
   const company = useReactiveVar(currentCompanyVar);
