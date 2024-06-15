@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Company,
   Shareholder,
@@ -10,6 +10,8 @@ import {
 import { Table, Button, Form, Container } from "react-bootstrap";
 import { MdOutlineModeEdit } from "react-icons/md";
 import { FaTrashAlt, FaRegCheckCircle } from "react-icons/fa";
+import { getFullyDilutedShareholder } from "../../utils/shareholder";
+import { getUnallocatedOptionsPercentage } from "../../utils/company";
 
 type CurrentTableProps = {
   company: Partial<Company> | undefined;
@@ -19,8 +21,6 @@ const CurrentTable: React.FC<CurrentTableProps> = ({ company }) => {
   const [shareholders, setShareholders] = React.useState<
     Array<Partial<Shareholder>>
   >(company?.shareholders || []);
-  const [editRow, setEditRow] = useState(-1);
-  const [errors, setErrors] = useState({});
   const [unallocatedOptions, setUnallocatedOptions] = useState(
     company?.unallocatedOptions || 0
   );
@@ -33,16 +33,14 @@ const CurrentTable: React.FC<CurrentTableProps> = ({ company }) => {
   const [deleteShareholder] = useDeleteShareholderMutation(mutationOptions);
   const [updateCompany] = useUpdateCompanyMutation(mutationOptions);
 
-  const editShareholder = (index: number, key: string, value: any) => {
-    let newShareholders = shareholders.map((shareholder, i) => {
-      if (i === index) return { ...shareholder, [key]: value };
-      return shareholder;
-    });
-    setShareholders(newShareholders);
-  };
+  useEffect(() => {
+    setShareholders(company?.shareholders || []);
+    setUnallocatedOptions(company?.unallocatedOptions || 0);
+  }, [company?.shareholders, company?.unallocatedOptions]);
 
-  const updateOutstandingOptions = (value: number) => {
+  const updateUnallocatedOptions = (value: number) => {
     setUnallocatedOptions(value);
+    if (value < 0 || Object.is(value, NaN)) return;
     updateCompany({
       variables: {
         input: {
@@ -54,56 +52,52 @@ const CurrentTable: React.FC<CurrentTableProps> = ({ company }) => {
     });
   };
 
-  const saveShareholder = async (index: number) => {
-    const shareholder = shareholders[index];
-    let shares = shareholder?.dilutedShares || 0;
-    let options = shareholder?.outstandingOptions || 0;
-    if (shareholder?.name) {
-      const shareholderData = {
-        name: shareholder?.name,
-        dilutedShares: shares,
-        outstandingOptions: options,
-        companyId: parseInt(company?.id || ""),
-      };
-      let err = {};
-      if (shareholder?.id && parseInt(shareholder?.id) > 0) {
-        let res = await updateShareholder({
-          variables: {
-            input: {
-              shareholderId: parseInt(shareholder?.id),
-              ...shareholderData,
-            },
+  const editShareholder = async (index: number, key: string, value: any) => {
+    let shareholder = { ...shareholders[index] };
+    shareholder[key] = value || undefined;
+    if (shareholder?.name && shareholder.id) {
+      let newShareholders = shareholders.map((s, i) =>
+        i === index ? shareholder : s
+      );
+      setShareholders(newShareholders);
+      if ((value === "" || Object.is(value, NaN)) && key !== "name") return;
+      await updateShareholder({
+        variables: {
+          input: {
+            shareholderId: parseInt(shareholder.id),
+            name: shareholder.name,
+            dilutedShares: shareholder.dilutedShares || 0,
+            outstandingOptions: shareholder?.outstandingOptions || 0,
+            companyId: parseInt(company?.id || ""),
           },
-        });
-        if (res?.errors?.length) err = res.errors[0];
-      } else {
-        let res = await createShareholder({
-          variables: {
-            input: shareholderData,
-          },
-        });
-        if (res?.errors?.length) err = res.errors[0];
-      }
-      if (Object.keys(err).length === 0) setEditRow(-1);
+        },
+      });
     }
   };
 
-  const addShareholder = () => {
-    if (editRow !== -1) return;
-    setEditRow(shareholders.length);
-    setShareholders([
-      ...shareholders,
-      {
-        id: ((shareholders.length + 1) * -1).toString(),
-        name: "Common Shareholder",
-        dilutedShares: 0,
-        outstandingOptions: 0,
+  const addShareholder = async () => {
+    let res = await createShareholder({
+      variables: {
+        input: {
+          companyId: parseInt(company?.id || ""),
+          name: "Common Shareholder",
+          dilutedShares: 0,
+          outstandingOptions: 0,
+        },
       },
-    ]);
+    });
+    let newShareholders = [...shareholders];
+    newShareholders.push({
+      companyId: parseInt(company?.id || ""),
+      id: res.data?.createShareholder?.id || "",
+      name: res.data?.createShareholder?.name || "",
+      dilutedShares: 0,
+      outstandingOptions: 0,
+    });
+    setShareholders(newShareholders);
   };
 
   const removeShareholder = (index: number) => {
-    if (editRow !== -1 || !shareholders[index]?.id) return;
     let newShareholders = shareholders.filter((shareholder, i) => i !== index);
     setShareholders(newShareholders);
     deleteShareholder({
@@ -112,15 +106,6 @@ const CurrentTable: React.FC<CurrentTableProps> = ({ company }) => {
       },
     });
   };
-
-  const getFullyDilutedShareholder = (shareholder: Partial<Shareholder>) =>
-    (shareholder?.dilutedShares || 0) + (shareholder?.outstandingOptions || 0);
-
-  const getUnallocatedOptionsPercentage = () =>
-    (
-      ((company?.unallocatedOptions || 0) / (company?.fullyDilutedTotal || 0)) *
-      100
-    ).toFixed(2) || "0.00";
 
   return (
     <>
@@ -135,7 +120,6 @@ const CurrentTable: React.FC<CurrentTableProps> = ({ company }) => {
               <th>Fully Diluted Total</th>
               <th>Fully Diluted %</th>
               <th></th>
-              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -146,7 +130,6 @@ const CurrentTable: React.FC<CurrentTableProps> = ({ company }) => {
                     <Form.Group>
                       <Form.Control
                         type="text"
-                        disabled={editRow !== index}
                         value={shareholder?.name}
                         onChange={(e) =>
                           editShareholder(index, "name", e.target.value)
@@ -159,9 +142,7 @@ const CurrentTable: React.FC<CurrentTableProps> = ({ company }) => {
                   <Form.Group>
                     <Form.Control
                       type="number"
-                      min="0"
-                      disabled={editRow !== index}
-                      value={shareholder?.dilutedShares ?? 0}
+                      value={shareholder?.dilutedShares ?? ""}
                       onChange={(e) =>
                         editShareholder(
                           index,
@@ -176,9 +157,7 @@ const CurrentTable: React.FC<CurrentTableProps> = ({ company }) => {
                   <Form.Group>
                     <Form.Control
                       type="number"
-                      min="0"
-                      disabled={editRow !== index}
-                      value={shareholder?.outstandingOptions ?? 0}
+                      value={shareholder?.outstandingOptions ?? ""}
                       onChange={(e) =>
                         editShareholder(
                           index,
@@ -189,8 +168,10 @@ const CurrentTable: React.FC<CurrentTableProps> = ({ company }) => {
                     />
                   </Form.Group>
                 </td>
-                <td>{getFullyDilutedShareholder(shareholder)}</td>
-                <td>
+                <td className="align-middle">
+                  {getFullyDilutedShareholder(shareholder)}
+                </td>
+                <td className="align-middle">
                   {(
                     (getFullyDilutedShareholder(shareholder) /
                       (company?.fullyDilutedTotal || 1)) *
@@ -198,24 +179,7 @@ const CurrentTable: React.FC<CurrentTableProps> = ({ company }) => {
                   ).toFixed(2) || 0}
                   %
                 </td>
-                <td>
-                  {editRow === index ? (
-                    <FaRegCheckCircle
-                      size={20}
-                      className="mx-2"
-                      onClick={() => saveShareholder(index)}
-                      color="green"
-                    />
-                  ) : (
-                    <MdOutlineModeEdit
-                      size={20}
-                      color="grey"
-                      className="mx-2"
-                      onClick={() => setEditRow(index)}
-                    />
-                  )}
-                </td>
-                <td>
+                <td className="align-middle">
                   <FaTrashAlt
                     size={16}
                     color="grey"
@@ -227,11 +191,10 @@ const CurrentTable: React.FC<CurrentTableProps> = ({ company }) => {
             ))}
             <tr style={{ borderBottom: "1px solid black" }}>
               <td>
-                <Button variant="primary" onClick={() => addShareholder()}>
+                <Button variant="primary" onClick={addShareholder}>
                   + Add Shareholder
                 </Button>
               </td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -245,24 +208,29 @@ const CurrentTable: React.FC<CurrentTableProps> = ({ company }) => {
               <td>{company?.shareholderFullyDiluted || 0}</td>
               <td>{company?.fullyDilutedSubtotalPercentage || 0}%</td>
               <td></td>
-              <td></td>
             </tr>
             <tr>
               <td className="">Unallocated Options</td>
               <td>
                 <Form.Control
                   type="number"
-                  min="0"
                   value={unallocatedOptions}
                   onChange={(e) =>
-                    updateOutstandingOptions(parseInt(e.target.value))
+                    updateUnallocatedOptions(parseInt(e.target.value))
                   }
                 />
               </td>
               <td></td>
-              <td>{company?.unallocatedOptions || 0}</td>
-              <td>{getUnallocatedOptionsPercentage()}%</td>
-              <td></td>
+              <td className="align-middle">
+                {company?.unallocatedOptions || ""}
+              </td>
+              <td>
+                {getUnallocatedOptionsPercentage(
+                  company?.unallocatedOptions,
+                  company?.fullyDilutedTotal
+                )}
+                %
+              </td>
               <td></td>
             </tr>
             <tr style={{ borderBottom: "1px solid black" }}>
@@ -276,12 +244,15 @@ const CurrentTable: React.FC<CurrentTableProps> = ({ company }) => {
               </td>
               <td>
                 <strong>
-                  {parseFloat(getUnallocatedOptionsPercentage()) +
-                    (company?.fullyDilutedSubtotalPercentage || 0)}
+                  {parseFloat(
+                    getUnallocatedOptionsPercentage(
+                      company?.unallocatedOptions,
+                      company?.fullyDilutedTotal
+                    )
+                  ) + (company?.fullyDilutedSubtotalPercentage || 0)}
                   %
                 </strong>
               </td>
-              <td></td>
               <td></td>
             </tr>
           </tbody>

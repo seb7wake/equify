@@ -8,6 +8,14 @@ class CompanyService
         @shareholders = Shareholder.where(company_id: company_id)
     end
 
+    def self.create_company(company_name)
+      company = Company.create!(name: company_name)
+      next_round = NextRound.create!(company_id: Company.last.id)
+      Investor.create!(name: "John Doe", amount: 500000, next_round_id: next_round.id)
+      Investor.create!(name: "Jane Doe", amount: 500000, next_round_id: next_round.id)
+      company
+    end
+
     def construct_company()
       @company.fully_diluted_shares = @shareholders.sum(:diluted_shares)
       @company.outstanding_options = @shareholders.sum(:outstanding_options)

@@ -66,8 +66,8 @@ const ModelRound: React.FC<ModelRoundProps> = ({ company }) => {
               </tr>
             </thead>
             <tbody className="my-3">
-              {company?.nextRound?.investors?.map((investor) => (
-                <tr>
+              {company?.nextRound?.investors?.map((investor, index) => (
+                <tr key={index}>
                   <td>
                     <Form.Control
                       type="text"
@@ -259,6 +259,7 @@ const ModelRound: React.FC<ModelRoundProps> = ({ company }) => {
                 </td>
                 <td>
                   <div className="d-flex align-items-center">
+                    $
                     {(
                       preMoneyValuation / (company?.fullyDilutedTotal || 1)
                     ).toFixed(4)}
@@ -273,7 +274,7 @@ const ModelRound: React.FC<ModelRoundProps> = ({ company }) => {
                 </td>
                 <td>
                   <div className="d-flex align-items-center">
-                    {preMoneyValuation}
+                    ${preMoneyValuation}
                   </div>
                 </td>
               </tr>
@@ -285,7 +286,7 @@ const ModelRound: React.FC<ModelRoundProps> = ({ company }) => {
                 </td>
                 <td>
                   <div className="d-flex align-items-center">
-                    {company?.nextRound?.buyingPower}
+                    ${company?.nextRound?.buyingPower}
                   </div>
                 </td>
               </tr>
@@ -297,7 +298,7 @@ const ModelRound: React.FC<ModelRoundProps> = ({ company }) => {
                 </td>
                 <td>
                   <div className="d-flex align-items-center">
-                    <strong>{company?.nextRound?.implicitValuation}</strong>
+                    <strong>${company?.nextRound?.implicitValuation}</strong>
                   </div>
                 </td>
               </tr>

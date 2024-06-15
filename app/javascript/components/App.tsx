@@ -13,7 +13,7 @@ import {
 import "bootstrap/dist/css/bootstrap.min.css";
 // Bootstrap Bundle JS
 import "bootstrap/dist/js/bootstrap.bundle.min";
-import Auth from "./pages/auth/Auth";
+import Auth from "./pages/Auth";
 import client, { currentCompanyVar } from "../apolloClient";
 import { useReactiveVar } from "@apollo/client";
 
@@ -26,7 +26,6 @@ document.addEventListener("turbo:load", () => {
 
 const App = () => {
   const currentCompany = useReactiveVar(currentCompanyVar);
-
   return (
     <ApolloProvider client={client}>
       <Router>

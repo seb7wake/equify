@@ -7,7 +7,6 @@ module Mutations
   
       def resolve(company_name:)
         company = AuthenticationService.new(company_name: company_name).authenticate()
-        puts "company in mutation: #{company}"
         if company
           { company: company, errors: [] }
         else

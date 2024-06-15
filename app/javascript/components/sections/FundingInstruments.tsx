@@ -9,6 +9,7 @@ import {
 } from "../../generated/graphql";
 import { MdOutlineModeEdit } from "react-icons/md";
 import { FaTrashAlt, FaRegCheckCircle } from "react-icons/fa";
+import { newFinancialInstrument } from "../../utils/company";
 
 type FundingInstrumentsProps = {
   company: Partial<Company> | undefined;
@@ -18,16 +19,15 @@ const FundingInstruments: React.FC<FundingInstrumentsProps> = ({ company }) => {
   const [instruments, setInstruments] = useState<
     Array<Partial<FinancialInstrument>>
   >(company?.financialInstruments || []);
-  const [createFinancialInstrument] = useCreateFinancialInstrumentMutation({
+  const mutationOptions = {
     refetchQueries: ["company"],
     awaitRefetchQueries: true,
-  });
+  };
+  const [createFinancialInstrument] =
+    useCreateFinancialInstrumentMutation(mutationOptions);
   const [deleteFinancialInstrument] = useDeleteFinancialInstrumentMutation();
-  const [updateFinancialInstrument] = useUpdateFinancialInstrumentMutation({
-    refetchQueries: ["company"],
-    awaitRefetchQueries: true,
-  });
-  //   const [editRow, setEditRow] = useState(-1);
+  const [updateFinancialInstrument] =
+    useUpdateFinancialInstrumentMutation(mutationOptions);
 
   useEffect(() => {
     setInstruments(company?.financialInstruments || []);
@@ -40,19 +40,15 @@ const FundingInstruments: React.FC<FundingInstrumentsProps> = ({ company }) => {
     });
     setInstruments(newInstruments);
     if ((value === "" || Object.is(value, NaN)) && key !== "name") return;
-
-    console.log(key, value);
-
-    console.log(newInstruments);
     updateFinancialInstrument({
       variables: {
         input: {
           financialInstrumentId: parseInt(instruments[index].id || ""),
           companyId: parseInt(company?.id || ""),
-          principal: newInstruments[index].principal,
           name: newInstruments[index].name || "",
           instrumentType:
             newInstruments[index]?.instrumentType || "Pre-Money SAFE",
+          principal: newInstruments[index].principal,
           valuationCap: newInstruments[index].valuationCap,
           discountRate: newInstruments[index].discountRate,
           interestRate: newInstruments[index].interestRate,
@@ -64,15 +60,7 @@ const FundingInstruments: React.FC<FundingInstrumentsProps> = ({ company }) => {
   };
 
   const addInstrument = () => {
-    const newInstrument = {
-      name: "SAFE holder",
-      principal: 0,
-      instrumentType: "Pre-Money SAFE",
-      valuationCap: 0,
-      discountRate: 0,
-      interestRate: 0,
-      companyId: parseInt(company?.id || ""),
-    } as FinancialInstrument;
+    const newInstrument = newFinancialInstrument(company?.id);
     setInstruments([...instruments, newInstrument]);
     createFinancialInstrument({
       variables: {
@@ -97,15 +85,6 @@ const FundingInstruments: React.FC<FundingInstrumentsProps> = ({ company }) => {
     let updatedInstrument = instruments[index];
     updatedInstrument = {
       ...updatedInstrument,
-      interestRate: value?.includes("Note")
-        ? updatedInstrument.interestRate
-        : 0,
-      issueDate: value?.includes("Note")
-        ? new Date().toISOString().split("T")[0]
-        : null,
-      conversionDate: value?.includes("Note")
-        ? new Date().toISOString().split("T")[0]
-        : null,
       instrumentType: value,
     };
     setInstruments(
@@ -187,7 +166,8 @@ const FundingInstruments: React.FC<FundingInstrumentsProps> = ({ company }) => {
                 </Form.Group>
               </td>
               <td>
-                <Form.Group>
+                <InputGroup>
+                  <InputGroup.Text>$</InputGroup.Text>
                   <Form.Control
                     type="number"
                     // disabled={editRow !== index}
@@ -200,10 +180,11 @@ const FundingInstruments: React.FC<FundingInstrumentsProps> = ({ company }) => {
                       )
                     }
                   />
-                </Form.Group>
+                </InputGroup>
               </td>
               <td>
-                <Form.Group>
+                <InputGroup>
+                  <InputGroup.Text>$</InputGroup.Text>
                   <Form.Control
                     type="number"
                     // disabled={editRow !== index}
@@ -216,7 +197,7 @@ const FundingInstruments: React.FC<FundingInstrumentsProps> = ({ company }) => {
                       )
                     }
                   />
-                </Form.Group>
+                </InputGroup>
               </td>
               <td>
                 <InputGroup>
@@ -359,9 +340,9 @@ const FundingInstruments: React.FC<FundingInstrumentsProps> = ({ company }) => {
               <td>{result.holderName}</td>
               <td>{result.instrumentType}</td>
               <td>{result.valuationCapDenominator}</td>
-              <td>{result.valuationCapSharePrice}</td>
-              <td>{result.discountedSharePrice}</td>
-              <td>{result.conversionPrice}</td>
+              <td>${result.valuationCapSharePrice}</td>
+              <td>${result.discountedSharePrice}</td>
+              <td>${result.conversionPrice}</td>
               <td>{result.sharesConverted}</td>
             </tr>
           ))}

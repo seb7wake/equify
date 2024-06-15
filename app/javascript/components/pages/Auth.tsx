@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
-import Header from "../../Header";
-import { useAuthMutation } from "../../../generated/graphql";
-import CurrentTable from "../CurrentTable";
-import { Company } from "../../../generated/graphql";
-import FundingInstruments from "../FundingInstruments";
-import ModelRound from "../ModelRound";
-import ProFormaCapTable from "../ProFormaCapTable";
+import Header from "../Header";
+import { useAuthMutation } from "../../generated/graphql";
+import CurrentTable from "../sections/CurrentTable";
+import { Company } from "../../generated/graphql";
+import FundingInstruments from "../sections/FundingInstruments";
+import ModelRound from "../sections/ModelRound";
+import ProFormaCapTable from "../sections/ProFormaCapTable";
 import { Button, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { currentCompanyVar } from "../../../apolloClient";
+import { currentCompanyVar } from "../../apolloClient";
 import { useReactiveVar } from "@apollo/client";
 
 const Auth: React.FC = () => {
@@ -20,21 +20,17 @@ const Auth: React.FC = () => {
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (!companyName) return;
-    try {
-      const response = await auth({
-        variables: {
-          input: {
-            companyName: companyName,
-          },
+    const response = await auth({
+      variables: {
+        input: {
+          companyName: companyName,
         },
-      });
-      console.log(response);
-      if (response.data?.auth?.company) {
-        currentCompanyVar(response.data.auth.company);
-        navigate("/");
-      }
-    } catch (error) {
-      console.error(error);
+      },
+    });
+    console.log(response);
+    if (response.data?.auth?.company) {
+      currentCompanyVar(response.data.auth.company);
+      navigate("/");
     }
   };
 

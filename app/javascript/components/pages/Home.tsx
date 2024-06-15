@@ -1,11 +1,11 @@
 import React from "react";
 import Header from "../Header";
 import { useCompanyQuery } from "../../generated/graphql";
-import CurrentTable from "./CurrentTable";
+import CurrentTable from "../sections/CurrentTable";
 import { Company } from "../../generated/graphql";
-import FundingInstruments from "./FundingInstruments";
-import ModelRound from "./ModelRound";
-import ProFormaCapTable from "./ProFormaCapTable";
+import FundingInstruments from "../sections/FundingInstruments";
+import ModelRound from "../sections/ModelRound";
+import ProFormaCapTable from "../sections/ProFormaCapTable";
 import { currentCompanyVar } from "../../apolloClient";
 import { useReactiveVar } from "@apollo/client";
 
@@ -15,8 +15,6 @@ const Home: React.FC = () => {
   const { data, loading, error } = useCompanyQuery({
     variables: { id: company.id },
   });
-
-  console.log(error?.message);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error</p>;
