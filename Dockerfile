@@ -40,8 +40,5 @@ ENV PRODUCTION_DB_USERNAME="seb7wake"
 # pre-compile Rails assets with master key
 RUN bundle exec rake assets:precompile
 
-RUN ls -alh public/assets
-RUN ls -alh public/packs
-
 EXPOSE 8080
 CMD ["bin/rails", "server", "-b", "0.0.0.0", "-p", "8080"]

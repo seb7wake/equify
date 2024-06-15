@@ -18,6 +18,7 @@ default: &default
   #  consistent use of scoping or naming conventions, the css order warnings can be disabled by setting
   #  css_extract_ignore_order_warnings to true
   css_extract_ignore_order_warnings: false
+  extract_css: false
 
   public_root_path: public
   public_output_path: packs
@@ -32,6 +33,7 @@ default: &default
   # Additional paths webpack should look up modules
   # ['app/assets', 'engine/foo/app/assets']
   additional_paths: []
+  resolved_paths: ["app/assets"]
 
   # Reload manifest.json on all requests so we reload latest compiled packs
   cache_manifest: false
