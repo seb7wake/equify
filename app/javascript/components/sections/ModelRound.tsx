@@ -38,18 +38,22 @@ const ModelRound: React.FC<ModelRoundProps> = ({ company }) => {
   const [deleteInvestor] = useDeleteInvestorMutation(mutationOptions);
   const [updateInvestor] = useUpdateInvestorMutation(mutationOptions);
 
-  const updateRound = (updatedFields: Partial<NextRound>) => {
+  const updateRound = async (updatedFields: Partial<NextRound>) => {
     const companyId = company?.id ? parseInt(company?.id || "") : 0;
-    updateNextRound({
-      variables: {
-        input: {
-          companyId: companyId,
-          preMoneyValuation:
-            updatedFields.preMoneyValuation || preMoneyValuation,
-          roundSize: updatedFields.roundSize || roundSize,
+    try {
+      await updateNextRound({
+        variables: {
+          input: {
+            companyId: companyId,
+            preMoneyValuation:
+              updatedFields.preMoneyValuation || parseInt(preMoneyValuation),
+            roundSize: updatedFields.roundSize || parseInt(roundSize),
+          },
         },
-      },
-    });
+      });
+    } catch (e) {
+      console.log("error:", e.message);
+    }
   };
 
   return (
@@ -205,27 +209,6 @@ const ModelRound: React.FC<ModelRoundProps> = ({ company }) => {
                   </InputGroup>
                 </td>
               </tr>
-              {/* <tr>
-            <td>
-              <div className="d-flex align-items-center">
-                Are Converted Shares Included in Round Price calculation?
-              </div>
-            </td>
-            <td>
-              <Form.Group>
-                <input
-                  type="checkbox"
-                  checked={isConvertedIncluded}
-                  onChange={() => {
-                    setIsConvertedIncluded(!isConvertedIncluded);
-                  }}
-                  onClick={() => {
-                    setIsConvertedIncluded(!isConvertedIncluded);
-                  }}
-                />
-              </Form.Group>
-            </td>
-          </tr> */}
               <tr>
                 <td className="border-top-0 border-bottom-0"></td>
                 <td className="border-top-0 border-bottom-0"></td>
@@ -234,7 +217,9 @@ const ModelRound: React.FC<ModelRoundProps> = ({ company }) => {
 
             <thead>
               <tr>
-                <th>Post-Money Valuation Calculation</th>
+                <th>
+                  Post-Money Valuation Calculation (No option pool refresh)
+                </th>
                 <th></th>
               </tr>
             </thead>
@@ -247,7 +232,7 @@ const ModelRound: React.FC<ModelRoundProps> = ({ company }) => {
                 </td>
                 <td>
                   <div className="d-flex align-items-center">
-                    {company?.fullyDilutedTotal}
+                    {company?.fullyDilutedTotal?.toLocaleString()}
                   </div>
                 </td>
               </tr>
@@ -274,7 +259,7 @@ const ModelRound: React.FC<ModelRoundProps> = ({ company }) => {
                 </td>
                 <td>
                   <div className="d-flex align-items-center">
-                    ${preMoneyValuation}
+                    {"$" + Number(preMoneyValuation)?.toLocaleString()}
                   </div>
                 </td>
               </tr>
@@ -286,7 +271,8 @@ const ModelRound: React.FC<ModelRoundProps> = ({ company }) => {
                 </td>
                 <td>
                   <div className="d-flex align-items-center">
-                    ${company?.nextRound?.buyingPower}
+                    {"$" +
+                      Number(company?.nextRound?.buyingPower)?.toLocaleString()}
                   </div>
                 </td>
               </tr>
@@ -298,7 +284,12 @@ const ModelRound: React.FC<ModelRoundProps> = ({ company }) => {
                 </td>
                 <td>
                   <div className="d-flex align-items-center">
-                    <strong>${company?.nextRound?.implicitValuation}</strong>
+                    <strong>
+                      {"$" +
+                        Number(
+                          company?.nextRound?.implicitValuation
+                        )?.toLocaleString()}
+                    </strong>
                   </div>
                 </td>
               </tr>

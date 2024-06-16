@@ -19,10 +19,10 @@ const ProFormaCapTable: React.FC<ProFormaCapTableProps> = ({ company }) => {
           </tr>
         </thead>
         <tbody className="my-3">
-          {company?.capTable?.shareholders?.map((shareholder) => (
-            <tr>
+          {company?.capTable?.shareholders?.map((shareholder, index) => (
+            <tr key={index}>
               <td>{shareholder.name}</td>
-              <td>{shareholder.fullyDilutedTotal}</td>
+              <td>{shareholder.fullyDilutedTotal?.toLocaleString()}</td>
               <td>{shareholder.fullyDilutedPercentage}%</td>
             </tr>
           ))}
@@ -34,7 +34,9 @@ const ProFormaCapTable: React.FC<ProFormaCapTableProps> = ({ company }) => {
               <strong>Total Shares Excluding Options</strong>
             </td>
             <td>
-              <strong>{company?.capTable?.sharesExcludingOptions}</strong>
+              <strong>
+                {company?.capTable?.sharesExcludingOptions?.toLocaleString()}
+              </strong>
             </td>
             <td>
               <strong>
@@ -49,7 +51,7 @@ const ProFormaCapTable: React.FC<ProFormaCapTableProps> = ({ company }) => {
           </tr>
           <tr>
             <td>Unallocated Options</td>
-            <td>{company?.capTable?.unallocatedOptions}</td>
+            <td>{company?.capTable?.unallocatedOptions?.toLocaleString()}</td>
             <td>{company?.capTable?.unallocatedOptionsPercentage}%</td>
           </tr>
           <tr
@@ -60,7 +62,9 @@ const ProFormaCapTable: React.FC<ProFormaCapTableProps> = ({ company }) => {
               <strong>Total</strong>
             </td>
             <td>
-              <strong>{company?.capTable?.totalShares}</strong>
+              <strong>
+                {company?.capTable?.totalShares?.toLocaleString()}
+              </strong>
             </td>
             <td>
               <strong>{company?.capTable?.totalSharesPercentage}%</strong>

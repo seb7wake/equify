@@ -169,7 +169,7 @@ const CurrentTable: React.FC<CurrentTableProps> = ({ company }) => {
                   </Form.Group>
                 </td>
                 <td className="align-middle">
-                  {getFullyDilutedShareholder(shareholder)}
+                  {getFullyDilutedShareholder(shareholder)?.toLocaleString()}
                 </td>
                 <td className="align-middle">
                   {(
@@ -203,9 +203,9 @@ const CurrentTable: React.FC<CurrentTableProps> = ({ company }) => {
             </tr>
             <tr>
               <td>Subtotal</td>
-              <td>{company?.fullyDilutedShares || 0}</td>
-              <td>{company?.outstandingOptions || 0}</td>
-              <td>{company?.shareholderFullyDiluted || 0}</td>
+              <td>{company?.fullyDilutedShares?.toLocaleString() || 0}</td>
+              <td>{company?.outstandingOptions?.toLocaleString() || 0}</td>
+              <td>{company?.shareholderFullyDiluted?.toLocaleString() || 0}</td>
               <td>{company?.fullyDilutedSubtotalPercentage || 0}%</td>
               <td></td>
             </tr>
@@ -222,7 +222,7 @@ const CurrentTable: React.FC<CurrentTableProps> = ({ company }) => {
               </td>
               <td></td>
               <td className="align-middle">
-                {company?.unallocatedOptions || ""}
+                {company?.unallocatedOptions?.toLocaleString() || ""}
               </td>
               <td>
                 {getUnallocatedOptionsPercentage(
@@ -240,7 +240,7 @@ const CurrentTable: React.FC<CurrentTableProps> = ({ company }) => {
               <td></td>
               <td></td>
               <td>
-                <strong>{company?.fullyDilutedTotal}</strong>
+                <strong>{company?.fullyDilutedTotal?.toLocaleString()}</strong>
               </td>
               <td>
                 <strong>

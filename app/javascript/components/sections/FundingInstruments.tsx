@@ -171,7 +171,7 @@ const FundingInstruments: React.FC<FundingInstrumentsProps> = ({ company }) => {
                   <Form.Control
                     type="number"
                     // disabled={editRow !== index}
-                    value={instrument?.principal}
+                    value={instrument?.principal || ""}
                     onChange={(e) =>
                       editInstruments(
                         index,
@@ -188,7 +188,7 @@ const FundingInstruments: React.FC<FundingInstrumentsProps> = ({ company }) => {
                   <Form.Control
                     type="number"
                     // disabled={editRow !== index}
-                    value={instrument?.valuationCap}
+                    value={instrument?.valuationCap || "0"}
                     onChange={(e) =>
                       editInstruments(
                         index,
@@ -204,7 +204,7 @@ const FundingInstruments: React.FC<FundingInstrumentsProps> = ({ company }) => {
                   <Form.Control
                     type="number"
                     // disabled={editRow !== index}
-                    value={instrument?.discountRate || 0}
+                    value={instrument?.discountRate ?? ""}
                     onChange={(e) =>
                       editInstruments(
                         index,
@@ -216,87 +216,6 @@ const FundingInstruments: React.FC<FundingInstrumentsProps> = ({ company }) => {
                   <InputGroup.Text>%</InputGroup.Text>
                 </InputGroup>
               </td>
-              {/* <td>
-                <InputGroup>
-                  <Form.Control
-                    type="decimal"
-                    disabled={
-                      //   editRow !== index ||
-                      !instrument?.instrumentType?.includes("Note")
-                    }
-                    value={instrument?.interestRate || 0}
-                    onChange={(e) =>
-                      editInstruments(
-                        index,
-                        "interestRate",
-                        parseInt(e.target.value)
-                      )
-                    }
-                  />
-                  <InputGroup.Text>%</InputGroup.Text>
-                </InputGroup>
-              </td>
-              <td>
-                <Form.Group>
-                  <Form.Control
-                    type="date"
-                    disabled={
-                      //   editRow !== index ||
-                      !instrument?.instrumentType?.includes("Note")
-                    }
-                    value={
-                      instrument.issueDate
-                        ? new Date(Date.parse(instrument.issueDate))
-                            .toISOString()
-                            .split("T")[0]
-                        : undefined
-                    }
-                    onChange={(e) =>
-                      editInstruments(index, "issueDate", e.target.value)
-                    }
-                  />
-                </Form.Group>
-              </td>
-              <td>
-                <Form.Group>
-                  <Form.Control
-                    type="date"
-                    disabled={
-                      //   editRow !== index ||
-                      !instrument?.instrumentType?.includes("Note")
-                    }
-                    value={
-                      instrument.conversionDate
-                        ? new Date(Date.parse(instrument.conversionDate))
-                            .toISOString()
-                            .split("T")[0]
-                        : undefined
-                    }
-                    onChange={(e) =>
-                      editInstruments(index, "conversionDate", e.target.value)
-                    }
-                  />
-                </Form.Group>
-              </td>
-              <td>{instrument.accruedInterest || 0}</td>
-              <td>{instrument.principalAndInterest || 0}</td> */}
-              {/* <td>
-                {editRow === index ? (
-                  <FaRegCheckCircle
-                    size={20}
-                    className="mx-2"
-                    // onClick={() => saveInstrument(index)}
-                    color="green"
-                  />
-                ) : (
-                  <MdOutlineModeEdit
-                    size={20}
-                    color="grey"
-                    className="mx-2"
-                    onClick={() => setEditRow(index)}
-                  />
-                )}
-              </td> */}
               <td>
                 <FaTrashAlt
                   size={16}
@@ -339,11 +258,13 @@ const FundingInstruments: React.FC<FundingInstrumentsProps> = ({ company }) => {
             <tr key={result.holderId}>
               <td>{result.holderName}</td>
               <td>{result.instrumentType}</td>
-              <td>{result.valuationCapDenominator}</td>
+              <td>
+                {Number(result.valuationCapDenominator)?.toLocaleString()}
+              </td>
               <td>${result.valuationCapSharePrice}</td>
               <td>${result.discountedSharePrice}</td>
               <td>${result.conversionPrice}</td>
-              <td>{result.sharesConverted}</td>
+              <td>{Number(result.sharesConverted)?.toLocaleString()}</td>
             </tr>
           ))}
         </tbody>

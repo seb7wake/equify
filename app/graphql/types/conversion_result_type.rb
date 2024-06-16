@@ -10,6 +10,7 @@ module Types
       field :discounted_share_price, Float, null: false
       field :conversion_price, Float, null: false
       field :shares_converted, GraphQL::Types::BigInt, null: false
+      field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     end
   end
   
