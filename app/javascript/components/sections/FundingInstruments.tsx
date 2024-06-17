@@ -25,7 +25,8 @@ const FundingInstruments: React.FC<FundingInstrumentsProps> = ({ company }) => {
   };
   const [createFinancialInstrument] =
     useCreateFinancialInstrumentMutation(mutationOptions);
-  const [deleteFinancialInstrument] = useDeleteFinancialInstrumentMutation();
+  const [deleteFinancialInstrument] =
+    useDeleteFinancialInstrumentMutation(mutationOptions);
   const [updateFinancialInstrument] =
     useUpdateFinancialInstrumentMutation(mutationOptions);
 
@@ -171,7 +172,7 @@ const FundingInstruments: React.FC<FundingInstrumentsProps> = ({ company }) => {
                   <Form.Control
                     type="number"
                     // disabled={editRow !== index}
-                    value={instrument?.principal || ""}
+                    value={instrument?.principal ?? ""}
                     onChange={(e) =>
                       editInstruments(
                         index,
@@ -188,7 +189,7 @@ const FundingInstruments: React.FC<FundingInstrumentsProps> = ({ company }) => {
                   <Form.Control
                     type="number"
                     // disabled={editRow !== index}
-                    value={instrument?.valuationCap || "0"}
+                    value={instrument?.valuationCap ?? ""}
                     onChange={(e) =>
                       editInstruments(
                         index,
@@ -205,13 +206,18 @@ const FundingInstruments: React.FC<FundingInstrumentsProps> = ({ company }) => {
                     type="number"
                     // disabled={editRow !== index}
                     value={instrument?.discountRate ?? ""}
-                    onChange={(e) =>
+                    max="99"
+                    min="0"
+                    onChange={(e) => {
+                      if (parseInt(e.target.value) > 99) {
+                        e.target.value = "99";
+                      }
                       editInstruments(
                         index,
                         "discountRate",
                         parseInt(e.target.value)
-                      )
-                    }
+                      );
+                    }}
                   />
                   <InputGroup.Text>%</InputGroup.Text>
                 </InputGroup>

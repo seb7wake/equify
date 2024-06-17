@@ -42,7 +42,12 @@ const Home: React.FC = () => {
 
   return (
     <>
-      <Header page={page} setPage={setPage} showNav />
+      <Header
+        page={page}
+        setPage={setPage}
+        showNav
+        name={data?.company?.name}
+      />
       <div className="d-flex bg-light min-vh-100">{getPage()}</div>
     </>
   );

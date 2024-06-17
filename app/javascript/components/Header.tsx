@@ -7,9 +7,10 @@ type HeaderProps = {
   page?: string;
   setPage?: (page: string) => void;
   showNav: boolean;
+  name?: string;
 };
 
-const Header: React.FC<HeaderProps> = ({ page, setPage, showNav }) => {
+const Header: React.FC<HeaderProps> = ({ page, setPage, showNav, name }) => {
   return (
     <Navbar className="bg-white px-5 border-bottom">
       <Container>
@@ -19,7 +20,7 @@ const Header: React.FC<HeaderProps> = ({ page, setPage, showNav }) => {
         >
           <MdOutlineHandshake className="me-2" size={40} />
           <div className="d-flex flex-column mx-2 h3 font-weight-bold">
-            Equify
+            {name ? name.charAt(0).toUpperCase() + name.slice(1) : "Equify"}
           </div>
         </Navbar.Brand>
       </Container>
