@@ -17,12 +17,13 @@
     "@types/webpack": "5",
     "babel-loader": "8",
     "bootstrap": "^5.3.3",
+    "clean-webpack-plugin": "^4.0.0",
     "compression-webpack-plugin": "9",
     "css-loader": "^7.1.2",
     "css-minimizer-webpack-plugin": "^6.0.0",
     "graphql": "^16.8.1",
     "ionicons": "^7.3.1",
-    "mini-css-extract-plugin": "^2.8.1",
+    "mini-css-extract-plugin": "^2.9.0",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-bootstrap": "^2.10.2",
@@ -34,7 +35,7 @@
     "sass-loader": "^14.2.1",
     "shakapacker": "7.2.3",
     "style-loader": "^4.0.0",
-    "terser-webpack-plugin": "5",
+    "terser-webpack-plugin": "^5.3.10",
     "webpack": "5",
     "webpack-assets-manifest": "5",
     "webpack-cli": "^5.1.4",
@@ -54,10 +55,11 @@
     "@graphql-codegen/cli": "5.0.2",
     "@graphql-codegen/client-preset": "4.2.5",
     "@graphql-codegen/introspection": "^4.0.3",
-    "webpack-dev-server": "4"
+    "webpack-dev-server": "^5.0.4"
   },
   "scripts": {
     "codegen": "graphql-codegen --config codegen.ts",
+    "start": "webpack serve --open --config config/webpack/webpack.config.js --mode development",
     "build": "webpack --config config/webpack/webpack.config.js --mode production"
   }
 }
