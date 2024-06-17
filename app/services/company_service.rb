@@ -28,8 +28,8 @@ class CompanyService
       @company.shareholder_fully_diluted = @company.fully_diluted_shares + @company.outstanding_options
       @company.fully_diluted_total = @company.shareholder_fully_diluted + @company.unallocated_options
       @company.fully_diluted_subtotal_percentage = ((@company.shareholder_fully_diluted / @company.fully_diluted_total.to_f) * 100).round(2)
-      @company.next_round = NextRoundService.new(company: @company).construct_next_round()
       @company.conversion_results = ConversionResultsService.new(company: @company).construct_conversion_results()
+      @company.next_round = NextRoundService.new(company: @company).construct_next_round()
       @company.cap_table = CapTableService.new(company: @company).construct_cap_table()
       @company
     end
