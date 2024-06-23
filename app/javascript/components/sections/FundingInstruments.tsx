@@ -112,7 +112,7 @@ const FundingInstruments: React.FC<FundingInstrumentsProps> = ({ company }) => {
   };
 
   return (
-    <Container>
+    <Container className="bg-light">
       <h4 className="my-4">SAFEs and Notes</h4>
       <Table hover className="border">
         <thead>

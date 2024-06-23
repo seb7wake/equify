@@ -108,157 +108,155 @@ const CurrentTable: React.FC<CurrentTableProps> = ({ company }) => {
   };
 
   return (
-    <>
-      <Container>
-        <h4 className="my-4">Current Cap Table</h4>
-        <Table hover className="border">
-          <thead>
-            <tr>
-              <th>Shareholder Name</th>
-              <th>Fully Diluted Shares</th>
-              <th>Outstanding Options</th>
-              <th>Fully Diluted Total</th>
-              <th>Fully Diluted %</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {shareholders?.map((shareholder, index) => (
-              <tr key={index}>
-                <td>
-                  <div className="d-flex align-items-center">
-                    <Form.Group>
-                      <Form.Control
-                        type="text"
-                        value={shareholder?.name}
-                        onChange={(e) =>
-                          editShareholder(index, "name", e.target.value)
-                        }
-                      />
-                    </Form.Group>
-                  </div>
-                </td>
-                <td>
+    <Container className="bg-light w-100">
+      <h4 className="my-4">Current Cap Table</h4>
+      <Table hover className="border">
+        <thead>
+          <tr>
+            <th>Shareholder Name</th>
+            <th>Fully Diluted Shares</th>
+            <th>Outstanding Options</th>
+            <th>Fully Diluted Total</th>
+            <th>Fully Diluted %</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {shareholders?.map((shareholder, index) => (
+            <tr key={index}>
+              <td>
+                <div className="d-flex align-items-center">
                   <Form.Group>
                     <Form.Control
-                      type="number"
-                      value={shareholder?.dilutedShares ?? ""}
+                      type="text"
+                      value={shareholder?.name}
                       onChange={(e) =>
-                        editShareholder(
-                          index,
-                          "dilutedShares",
-                          parseInt(e.target.value)
-                        )
+                        editShareholder(index, "name", e.target.value)
                       }
                     />
                   </Form.Group>
-                </td>
-                <td>
-                  <Form.Group>
-                    <Form.Control
-                      type="number"
-                      value={shareholder?.outstandingOptions ?? ""}
-                      onChange={(e) =>
-                        editShareholder(
-                          index,
-                          "outstandingOptions",
-                          parseInt(e.target.value)
-                        )
-                      }
-                    />
-                  </Form.Group>
-                </td>
-                <td className="align-middle">
-                  {getFullyDilutedShareholder(shareholder)?.toLocaleString()}
-                </td>
-                <td className="align-middle">
-                  {(
-                    (getFullyDilutedShareholder(shareholder) /
-                      (company?.fullyDilutedTotal || 1)) *
-                    100
-                  ).toFixed(2) || 0}
-                  %
-                </td>
-                <td className="align-middle">
-                  <FaTrashAlt
-                    size={16}
-                    color="grey"
-                    className="mx-2"
-                    onClick={() => removeShareholder(index)}
+                </div>
+              </td>
+              <td>
+                <Form.Group>
+                  <Form.Control
+                    type="number"
+                    value={shareholder?.dilutedShares ?? ""}
+                    onChange={(e) =>
+                      editShareholder(
+                        index,
+                        "dilutedShares",
+                        parseInt(e.target.value)
+                      )
+                    }
                   />
-                </td>
-              </tr>
-            ))}
-            <tr style={{ borderBottom: "1px solid black" }}>
-              <td>
-                <Button variant="primary" onClick={addShareholder}>
-                  + Add Shareholder
-                </Button>
+                </Form.Group>
               </td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td>Subtotal</td>
-              <td>{company?.fullyDilutedShares?.toLocaleString() || 0}</td>
-              <td>{company?.outstandingOptions?.toLocaleString() || 0}</td>
-              <td>{company?.shareholderFullyDiluted?.toLocaleString() || 0}</td>
-              <td>{company?.fullyDilutedSubtotalPercentage || 0}%</td>
-              <td></td>
-            </tr>
-            <tr>
-              <td className="">Unallocated Options</td>
               <td>
-                <Form.Control
-                  type="number"
-                  value={unallocatedOptions}
-                  onChange={(e) =>
-                    updateUnallocatedOptions(parseInt(e.target.value))
-                  }
-                />
+                <Form.Group>
+                  <Form.Control
+                    type="number"
+                    value={shareholder?.outstandingOptions ?? ""}
+                    onChange={(e) =>
+                      editShareholder(
+                        index,
+                        "outstandingOptions",
+                        parseInt(e.target.value)
+                      )
+                    }
+                  />
+                </Form.Group>
               </td>
-              <td></td>
               <td className="align-middle">
-                {company?.unallocatedOptions?.toLocaleString() || ""}
+                {getFullyDilutedShareholder(shareholder)?.toLocaleString()}
               </td>
-              <td>
-                {getUnallocatedOptionsPercentage(
-                  company?.unallocatedOptions,
-                  company?.fullyDilutedTotal
-                )}
+              <td className="align-middle">
+                {(
+                  (getFullyDilutedShareholder(shareholder) /
+                    (company?.fullyDilutedTotal || 1)) *
+                  100
+                ).toFixed(2) || 0}
                 %
               </td>
-              <td></td>
+              <td className="align-middle">
+                <FaTrashAlt
+                  size={16}
+                  color="grey"
+                  className="mx-2"
+                  onClick={() => removeShareholder(index)}
+                />
+              </td>
             </tr>
-            <tr style={{ borderBottom: "1px solid black" }}>
-              <td>
-                <strong>Total</strong>
-              </td>
-              <td></td>
-              <td></td>
-              <td>
-                <strong>{company?.fullyDilutedTotal?.toLocaleString()}</strong>
-              </td>
-              <td>
-                <strong>
-                  {parseFloat(
-                    getUnallocatedOptionsPercentage(
-                      company?.unallocatedOptions,
-                      company?.fullyDilutedTotal
-                    )
-                  ) + (company?.fullyDilutedSubtotalPercentage || 0)}
-                  %
-                </strong>
-              </td>
-              <td></td>
-            </tr>
-          </tbody>
-        </Table>
-      </Container>
-    </>
+          ))}
+          <tr style={{ borderBottom: "1px solid black" }}>
+            <td>
+              <Button variant="primary" onClick={addShareholder}>
+                + Add Shareholder
+              </Button>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>Subtotal</td>
+            <td>{company?.fullyDilutedShares?.toLocaleString() || 0}</td>
+            <td>{company?.outstandingOptions?.toLocaleString() || 0}</td>
+            <td>{company?.shareholderFullyDiluted?.toLocaleString() || 0}</td>
+            <td>{company?.fullyDilutedSubtotalPercentage || 0}%</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td className="">Unallocated Options</td>
+            <td>
+              <Form.Control
+                type="number"
+                value={unallocatedOptions}
+                onChange={(e) =>
+                  updateUnallocatedOptions(parseInt(e.target.value))
+                }
+              />
+            </td>
+            <td></td>
+            <td className="align-middle">
+              {company?.unallocatedOptions?.toLocaleString() || ""}
+            </td>
+            <td>
+              {getUnallocatedOptionsPercentage(
+                company?.unallocatedOptions,
+                company?.fullyDilutedTotal
+              )}
+              %
+            </td>
+            <td></td>
+          </tr>
+          <tr style={{ borderBottom: "1px solid black" }}>
+            <td>
+              <strong>Total</strong>
+            </td>
+            <td></td>
+            <td></td>
+            <td>
+              <strong>{company?.fullyDilutedTotal?.toLocaleString()}</strong>
+            </td>
+            <td>
+              <strong>
+                {parseFloat(
+                  getUnallocatedOptionsPercentage(
+                    company?.unallocatedOptions,
+                    company?.fullyDilutedTotal
+                  )
+                ) + (company?.fullyDilutedSubtotalPercentage || 0)}
+                %
+              </strong>
+            </td>
+            <td></td>
+          </tr>
+        </tbody>
+      </Table>
+    </Container>
   );
 };
 

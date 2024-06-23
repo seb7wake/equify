@@ -12,7 +12,7 @@ type HeaderProps = {
 
 const Header: React.FC<HeaderProps> = ({ page, setPage, showNav, name }) => {
   return (
-    <Navbar className="bg-white px-5 border-bottom">
+    <Navbar className="bg-white px-5 border-bottom" expand="lg">
       <Container>
         <Navbar.Brand
           className="d-flex align-items-center"
@@ -23,6 +23,7 @@ const Header: React.FC<HeaderProps> = ({ page, setPage, showNav, name }) => {
             {name ? name.charAt(0).toUpperCase() + name.slice(1) : "Equify"}
           </div>
         </Navbar.Brand>
+        {showNav && <Navbar.Toggle aria-controls="basic-navbar-nav me-5" />}
       </Container>
       <Navbar.Collapse className="mx-5">
         {showNav && (

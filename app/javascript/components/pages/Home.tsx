@@ -48,7 +48,7 @@ const Home: React.FC = () => {
         showNav
         name={data?.company?.name}
       />
-      <div className="d-flex bg-light min-vh-100">{getPage()}</div>
+      <div className="d-flex bg-light min-vh-100 w-100">{getPage()}</div>
     </>
   );
 };
